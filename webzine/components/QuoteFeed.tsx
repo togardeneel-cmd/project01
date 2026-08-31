@@ -55,12 +55,17 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
       // Generate random positions and styles for the "scattered" field effect
       const isMobile = window.innerWidth < 768;
       const newPositions = filtered.map((_, i) => {
-        const topBase = isMobile ? i * 250 : Math.random() * 800;
-        const topOffset = isMobile ? Math.random() * 50 : 0;
-        const leftRange = isMobile ? 20 : 75;
-        const leftOffset = isMobile ? 5 : 5;
+        // Reduce strict vertical spacing, allow more overlap like scattered pebbles
+        const topBase = isMobile ? i * 160 : Math.random() * 800;
+        const topOffset = isMobile ? Math.random() * 90 : 0;
+        
+        // Alternate sides and allow much wider horizontal range on mobile
+        const isLeftPreference = i % 2 === 0;
+        const leftRange = isMobile ? 35 : 75;
+        const leftOffset = isMobile ? (isLeftPreference ? 5 : 35) : 5;
+        
         return {
-          top: isMobile ? `${topBase + topOffset}px` : `${Math.random() * 60 + 5}%`,
+          top: isMobile ? `${topBase + topOffset + 50}px` : `${Math.random() * 60 + 5}%`,
           left: `${Math.random() * leftRange + leftOffset}%`,
           rotate: (Math.random() - 0.5) * 40,
           scale: 0.85 + Math.random() * 0.3,

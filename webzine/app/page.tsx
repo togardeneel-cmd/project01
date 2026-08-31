@@ -101,14 +101,14 @@ export default function Home() {
       {/* Main Headline - Full Width Top */}
       <div className="relative z-10 w-full pt-12 md:pt-16 pb-8 overflow-hidden flex justify-center px-2">
         <h2 
-          className="w-full text-center font-serif text-white/90 leading-none whitespace-nowrap tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]"
-          style={{ fontSize: "clamp(12px, 3.8vw, 120px)" }}
+          className="w-full text-center font-serif font-bold md:font-normal text-white/90 leading-[1.3] md:leading-none tracking-tight drop-shadow-[0_3px_8px_rgba(0,0,0,0.5)] px-4"
+          style={{ fontSize: "clamp(20px, 5.5vw, 120px)", wordBreak: "keep-all" }}
         >
-          <span className="relative inline-block text-left">
+          <span className="relative inline-block text-center">
             {/* Invisible full text to reserve space */}
             <span className="opacity-0 pointer-events-none">{fullText}</span>
             {/* Visible typing text */}
-            <span className="absolute top-0 left-0 whitespace-nowrap">
+            <span className="absolute top-0 left-0 w-full h-full text-center">
               {displayedText}
               <span className={`inline-block w-[0.05em] h-[0.8em] bg-white/80 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
             </span>
