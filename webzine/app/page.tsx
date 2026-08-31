@@ -62,7 +62,7 @@ export default function Home() {
             {/* Invisible full text to reserve space */}
             <span className="opacity-0 pointer-events-none">{fullText}</span>
             {/* Visible typing text */}
-            <span className="absolute top-0 left-0 whitespace-nowrap bg-[linear-gradient(transparent_60%,_rgba(255,255,255,0.7)_60%)] drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+            <span className="absolute top-0 left-0 whitespace-nowrap bg-[linear-gradient(transparent_45%,_rgba(255,255,255,0.7)_45%,_rgba(255,255,255,0.7)_85%,_transparent_85%)] drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
               {displayedText}
               <span className={`inline-block w-[0.05em] h-[0.8em] bg-[#5D4037]/70 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
             </span>
