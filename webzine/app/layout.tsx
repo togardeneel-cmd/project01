@@ -16,7 +16,7 @@ const antroVectra = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bookshelf | Online Library",
+  title: "A Field of Sentences",
   description: "A warm, analog bookshelf and modern webzine platform.",
 };
 
