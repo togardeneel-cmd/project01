@@ -55,26 +55,37 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
 
       // Generate random positions and styles for the "scattered" field effect
       const isMobile = window.innerWidth < 768;
-      const verticalSpacing = isMobile ? 160 : 250;
+      
       const computedHeight = Math.max(
         window.innerHeight * 1.5,
-        filtered.length * verticalSpacing + 400
+        isMobile 
+          ? filtered.length * 160 + 400 
+          : Math.floor(filtered.length / 4) * 180 + 500
       );
       setFeedHeight(computedHeight);
 
       const newPositions = filtered.map((_, i) => {
-        // Reduce strict vertical spacing, allow more overlap like scattered pebbles
-        const topBase = isMobile ? i * verticalSpacing : Math.random() * 800;
-        const topOffset = isMobile ? Math.random() * 90 : 0;
+        // Mobile logic
+        const topBaseMobile = i * 160;
+        const leftRangeMobile = 35;
+        const leftOffsetMobile = (i % 2 === 0) ? 5 : 35;
         
-        // Alternate sides and allow much wider horizontal range on mobile
-        const isLeftPreference = i % 2 === 0;
-        const leftRange = isMobile ? 35 : 75;
-        const leftOffset = isMobile ? (isLeftPreference ? 5 : 35) : 5;
+        // PC logic: 4 scattered columns to pack densely on the first screen
+        const col = i % 4;
+        const row = Math.floor(i / 4);
+        const topBasePC = row * 200; // tighter vertical packing
+        const leftBasePC = (col * 22) + 5; // columns around 5%, 27%, 49%, 71%
         
+        const topBase = isMobile ? topBaseMobile : topBasePC;
+        const topOffset = isMobile ? Math.random() * 90 : Math.random() * 80;
+        
+        const leftValue = isMobile 
+          ? `${Math.random() * leftRangeMobile + leftOffsetMobile}%` 
+          : `${leftBasePC + Math.random() * 8}%`; // slight random horizontal offset
+          
         return {
-          top: isMobile ? `${topBase + topOffset + 50}px` : `${Math.random() * 60 + 5}%`,
-          left: `${Math.random() * leftRange + leftOffset}%`,
+          top: `${topBase + topOffset + (isMobile ? 50 : 120)}px`,
+          left: leftValue,
           rotate: (Math.random() - 0.5) * 40,
           scale: 0.85 + Math.random() * 0.3,
           zIndex: Math.floor(Math.random() * 50),
