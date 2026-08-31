@@ -55,16 +55,16 @@ export default function Home() {
       {/* Main Headline - Full Width Top */}
       <div className="relative z-10 w-full pt-12 md:pt-16 pb-8 overflow-hidden flex justify-center px-2">
         <h2 
-          className="w-full text-center font-serif text-[#5D4037]/90 leading-none whitespace-nowrap tracking-tight"
+          className="w-full text-center font-serif text-white/90 leading-none whitespace-nowrap tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]"
           style={{ fontSize: "clamp(12px, 3.8vw, 120px)" }}
         >
           <span className="relative inline-block text-left">
             {/* Invisible full text to reserve space */}
             <span className="opacity-0 pointer-events-none">{fullText}</span>
             {/* Visible typing text */}
-            <span className="absolute top-0 left-0 whitespace-nowrap bg-[linear-gradient(transparent_25%,_rgba(255,255,255,0.7)_25%,_rgba(255,255,255,0.7)_90%,_transparent_90%)] drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+            <span className="absolute top-0 left-0 whitespace-nowrap">
               {displayedText}
-              <span className={`inline-block w-[0.05em] h-[0.8em] bg-[#5D4037]/70 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
+              <span className={`inline-block w-[0.05em] h-[0.8em] bg-white/80 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
             </span>
           </span>
         </h2>
