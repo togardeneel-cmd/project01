@@ -48,7 +48,7 @@ export const addQuote = async (quote: Omit<Quote, "id" | "createdAt">): Promise<
   } catch (e) {
     console.error(e);
     // Fallback to localStorage if API fails
-    const quotes = getQuotes();
+    const quotes = await getQuotes();
     const newQuote: Quote = { ...quote, id: Math.random().toString(36).substr(2, 9), createdAt: Date.now() };
     localStorage.setItem('webzine_quotes_v2', JSON.stringify([newQuote, ...quotes]));
     return newQuote;

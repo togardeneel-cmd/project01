@@ -19,9 +19,13 @@ export default function QuoteDetailModal({ quote, onClose, onSelectQuote }: Quot
     if (quote) {
       setComments(getComments(quote.id));
       
-      const all = getQuotes();
-      const related = all.filter(q => q.bookTitle === quote.bookTitle && q.id !== quote.id);
-      setRelatedQuotes(related);
+      const fetchRelated = async () => {
+        const all = await getQuotes();
+        const related = all.filter(q => q.bookTitle === quote.bookTitle && q.id !== quote.id);
+        setRelatedQuotes(related);
+      };
+      
+      fetchRelated();
     }
   }, [quote]);
 
