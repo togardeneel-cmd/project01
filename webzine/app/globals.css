@@ -1,5 +1,18 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'BookkMyungjo';
+  src: url('/fonts/BookkMyungjo_Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BookkMyungjo';
+  src: url('/fonts/BookkMyungjo_Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 
 @theme inline {
   --color-canvas: #f0e7d3;
@@ -14,8 +27,8 @@
   
   --shadow-warm-ring: 0 0 0 1px var(--color-ring);
   
-  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  --font-serif: var(--font-noto-serif), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: 'BookkMyungjo', "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --font-serif: 'BookkMyungjo', var(--font-noto-serif), Georgia, Cambria, "Times New Roman", Times, serif;
   --font-script: var(--font-script), cursive;
 }
 
@@ -25,7 +38,26 @@
 }
 
 body {
-  background: var(--background);
+  background-image: url('/22.gif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
 }

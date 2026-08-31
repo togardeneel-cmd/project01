@@ -1,47 +1,85 @@
 "use client";
 
-import { useState } from "react";
-import Bookshelf from "@/components/Bookshelf";
-import { X } from "lucide-react";
-import type { TocItem } from "@/lib/mock-data";
+import { useState, useEffect } from "react";
+import QuoteFeed from "@/components/QuoteFeed";
+import AddQuoteModal from "@/components/AddQuoteModal";
+import { Plus, BookOpen } from "lucide-react";
 
 export default function Home() {
-  const [selectedItem, setSelectedItem] = useState<TocItem | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const fullText = "Sometimes, a sentence feels like a piece of luck";
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplayedText(fullText.slice(0, currentIndex + 1));
+        currentIndex++;
+        if (currentIndex === fullText.length) {
+          clearInterval(interval);
+          setIsTyping(false);
+        }
+      }, 70);
+      return () => clearInterval(interval);
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const handleQuoteAdded = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   return (
-    <main className="flex min-h-screen flex-row items-center justify-between p-4 bg-[url('/07.jpg')] bg-cover bg-center bg-no-repeat relative">
+    <main className="min-h-screen bg-[url('/22.gif')] bg-cover bg-center bg-no-repeat bg-fixed relative overflow-x-hidden font-sans">
+      {/* Fine SVG Noise Texture Overlay */}
       <div 
-        className="absolute inset-0 pointer-events-none z-0 opacity-[0.15] mix-blend-overlay" 
-        style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }}
+        className="absolute inset-0 pointer-events-none z-0 opacity-20 mix-blend-overlay"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
       ></div>
-      
-      {/* Left Pane: Bookshelf */}
-      <div className={`relative z-10 h-full flex flex-col justify-center transition-all duration-500 ease-in-out ${selectedItem ? 'w-full md:w-1/2 pr-0 md:pr-8' : 'w-full'}`}>
-        <Bookshelf onSelectContent={setSelectedItem} />
+
+      {/* Main Headline - Full Width Top */}
+      <div className="relative z-10 w-full pt-12 md:pt-16 pb-8 overflow-hidden flex justify-center px-2">
+        <h2 
+          className="w-full text-center font-serif text-[#5D4037]/90 leading-none whitespace-nowrap tracking-tight"
+          style={{ fontSize: "clamp(12px, 3.8vw, 120px)" }}
+        >
+          <span className="relative inline-block text-left">
+            {/* Invisible full text to reserve space */}
+            <span className="opacity-0 pointer-events-none">{fullText}</span>
+            {/* Visible typing text */}
+            <span className="absolute top-0 left-0 whitespace-nowrap bg-[linear-gradient(transparent_60%,_rgba(255,255,255,0.7)_60%)] drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+              {displayedText}
+              <span className={`inline-block w-[0.05em] h-[0.8em] bg-[#5D4037]/70 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
+            </span>
+          </span>
+        </h2>
       </div>
 
-      {/* Right Pane: Content (Internal) */}
-      {selectedItem && (
-        <div className="fixed md:relative inset-4 md:inset-auto z-50 md:z-10 w-auto md:w-1/2 h-auto md:h-[calc(100vh-2rem)] flex flex-col bg-[url('/bbg02.jpg')] bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden border border-black/10 transition-all duration-500 ease-in-out animate-in fade-in slide-in-from-bottom-8 md:slide-in-from-right-8">
-          <div className="flex items-center justify-between p-4 md:p-6 border-b border-black/5 bg-transparent">
-            <span className="text-sm font-medium text-gray-500 truncate pr-4">{selectedItem.label}</span>
-            <button 
-              onClick={() => setSelectedItem(null)}
-              className="p-2 rounded-full hover:bg-black/5 transition-colors"
-            >
-              <X size={20} className="text-gray-600" />
-            </button>
-          </div>
-          <div className="w-full flex-1 overflow-y-auto p-6 md:p-14 lg:p-20 custom-scrollbar">
-            <article className="max-w-prose mx-auto">
-              <h1 className="font-serif text-3xl md:text-5xl font-medium tracking-tight mb-8 md:mb-12 leading-snug text-gray-900 break-keep">{selectedItem.label}</h1>
-              <div className="font-sans text-base md:text-lg leading-relaxed text-gray-700 whitespace-pre-wrap">
-                {selectedItem.content}
-              </div>
-            </article>
-          </div>
-        </div>
-      )}
+      {/* Floating Add Button - Bottom Center */}
+      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          style={{ borderRadius: "40% 60% 70% 30% / 40% 50% 60% 50%" }}
+          className="flex items-center space-x-2 bg-[#2D4A22]/90 backdrop-blur-md text-white px-8 py-5 hover:bg-[#1A2F13] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
+        >
+          <Plus size={20} />
+          <span className="text-base font-medium">조각 남기기</span>
+        </button>
+      </div>
+
+      <div className="relative z-10 w-full">
+        <QuoteFeed refreshTrigger={refreshTrigger} />
+      </div>
+
+      <AddQuoteModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAdded={handleQuoteAdded}
+      />
     </main>
   );
 }
