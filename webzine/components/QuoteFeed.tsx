@@ -70,18 +70,18 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
         const leftRangeMobile = 35;
         const leftOffsetMobile = (i % 2 === 0) ? 5 : 35;
         
-        // PC logic: 4 scattered columns to pack densely on the first screen
+        // PC logic: More clustered and organic, overlapping
         const col = i % 4;
         const row = Math.floor(i / 4);
-        const topBasePC = row * 200; // tighter vertical packing
-        const leftBasePC = (col * 22) + 5; // columns around 5%, 27%, 49%, 71%
+        const topBasePC = row * 120; // very tight vertical packing so they overlap
+        const leftBasePC = (col * 20) + 10; // 10%, 30%, 50%, 70%
         
         const topBase = isMobile ? topBaseMobile : topBasePC;
-        const topOffset = isMobile ? Math.random() * 90 : Math.random() * 80;
+        const topOffset = isMobile ? Math.random() * 90 : Math.random() * 180; // Large random vertical drift
         
         const leftValue = isMobile 
           ? `${Math.random() * leftRangeMobile + leftOffsetMobile}%` 
-          : `${leftBasePC + Math.random() * 8}%`; // slight random horizontal offset
+          : `${leftBasePC + (Math.random() - 0.5) * 16}%`; // Large random horizontal drift to break the grid
           
         return {
           top: `${topBase + topOffset + (isMobile ? 50 : 120)}px`,
