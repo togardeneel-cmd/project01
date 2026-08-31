@@ -101,14 +101,13 @@ export default function Home() {
       {/* Main Headline - Full Width Top */}
       <div className="relative z-10 w-full pt-12 md:pt-16 pb-8 overflow-hidden flex justify-center px-2">
         <h2 
-          className="w-full text-center font-serif font-bold md:font-normal text-white/90 leading-[1.3] md:leading-none tracking-tight drop-shadow-[0_3px_8px_rgba(0,0,0,0.5)] px-4"
-          style={{ fontSize: "clamp(20px, 5.5vw, 120px)", wordBreak: "keep-all" }}
+          className="w-full text-center font-serif font-bold md:font-normal text-white/90 leading-[1.3] md:leading-none tracking-tight drop-shadow-[0_3px_8px_rgba(0,0,0,0.5)] px-4 text-[clamp(20px,6vw,120px)] md:text-[clamp(20px,3.5vw,120px)] break-keep md:whitespace-nowrap"
         >
           <span className="relative inline-block text-center">
             {/* Invisible full text to reserve space */}
-            <span className="opacity-0 pointer-events-none">{fullText}</span>
+            <span className="opacity-0 pointer-events-none md:whitespace-nowrap">{fullText}</span>
             {/* Visible typing text */}
-            <span className="absolute top-0 left-0 w-full h-full text-center">
+            <span className="absolute top-0 left-0 w-full h-full text-center md:whitespace-nowrap">
               {displayedText}
               <span className={`inline-block w-[0.05em] h-[0.8em] bg-white/80 ml-[2px] align-baseline transition-opacity duration-1000 ${isTyping ? 'animate-pulse opacity-100' : 'opacity-0'}`}></span>
             </span>
