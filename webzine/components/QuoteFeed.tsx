@@ -75,8 +75,8 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
     <div className="w-full relative min-h-[150vh] md:min-h-[1000px] overflow-x-hidden pb-32" ref={containerRef}>
       
       {/* Total Count */}
-      <div className="w-full text-center pt-2 pb-6 z-20 relative">
-        <p className="text-white/90 font-serif text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+      <div className="fixed top-6 right-6 z-50 pointer-events-none">
+        <p className="text-white/60 font-sans text-[10px] md:text-xs tracking-wide">
           {totalCount}개의 조각이 모였습니다
         </p>
       </div>
