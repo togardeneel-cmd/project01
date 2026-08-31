@@ -43,13 +43,15 @@ export default function QuoteCard({
   ];
   const leafRadius = radiusVariants[index % radiusVariants.length];
 
-  // Subtle clover green colors with transparency
-  const colorVariants = [
-    "bg-gradient-to-br from-[#e6f4ea]/65 to-[#ceead6]/65 backdrop-blur-md",
-    "bg-gradient-to-br from-[#f1f8e9]/65 to-[#dcedc8]/65 backdrop-blur-md",
-    "bg-gradient-to-br from-[#e8f5e9]/65 to-[#c8e6c9]/65 backdrop-blur-md",
+  // Diverse color themes for Quote Cards
+  const themes = [
+    { bg: "bg-gradient-to-br from-[#e6f4ea]/75 to-[#ceead6]/75 backdrop-blur-md", text: "text-green-950/80", title: "text-green-900", icon: "text-green-700" },
+    { bg: "bg-gradient-to-br from-[#fff8e1]/75 to-[#ffecb3]/75 backdrop-blur-md", text: "text-amber-950/80", title: "text-amber-900", icon: "text-amber-700" },
+    { bg: "bg-gradient-to-br from-[#ffffff]/80 to-[#f5f5f5]/80 backdrop-blur-md", text: "text-slate-800/90", title: "text-slate-900", icon: "text-slate-600" },
+    { bg: "bg-gradient-to-br from-[#f0f8ff]/75 to-[#e1f5fe]/75 backdrop-blur-md", text: "text-sky-950/80", title: "text-sky-900", icon: "text-sky-700" },
+    { bg: "bg-gradient-to-br from-[#fff0f5]/75 to-[#fce4ec]/75 backdrop-blur-md", text: "text-rose-950/80", title: "text-rose-900", icon: "text-rose-700" }
   ];
-  const leafColor = colorVariants[index % colorVariants.length];
+  const theme = themes[index % themes.length];
 
   return (
     <motion.div
@@ -73,22 +75,22 @@ export default function QuoteCard({
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
       style={{ borderRadius: leafRadius, zIndex: isHighlighted ? 50 : undefined }}
-      className={`cursor-grab flex flex-col justify-center items-center p-4 md:p-6 shadow-sm hover:shadow-xl border border-white/50 w-[120px] h-[120px] md:w-[150px] md:h-[150px] ${leafColor}`}
+      className={`cursor-grab flex flex-col justify-center items-center p-4 md:p-6 shadow-sm hover:shadow-xl border border-white/50 w-[120px] h-[120px] md:w-[150px] md:h-[150px] ${theme.bg}`}
     >
       <div className="flex-1 flex items-center justify-center pointer-events-none w-full px-1">
         <p 
-          className="text-[7px] md:text-[9px] leading-relaxed text-green-950/70 text-center break-keep tracking-wide font-serif line-clamp-4 overflow-hidden"
+          className={`text-[7px] md:text-[9px] leading-relaxed text-center break-keep tracking-wide font-serif line-clamp-4 overflow-hidden ${theme.text}`}
         >
           {quote.content}
         </p>
       </div>
       
-      <div className="flex flex-col items-center justify-end mt-2 text-center pointer-events-none opacity-60">
-        <h3 className="font-medium text-green-900 text-[6px] md:text-[8px] line-clamp-1">
+      <div className={`flex flex-col items-center justify-end mt-2 text-center pointer-events-none opacity-80 ${theme.title}`}>
+        <h3 className="font-medium text-[6px] md:text-[8px] line-clamp-1">
           {quote.bookTitle}
         </h3>
         
-        <div className="flex items-center space-x-1 text-green-700 mt-1">
+        <div className={`flex items-center space-x-1 mt-1 ${theme.icon}`}>
           <MessageCircle size={8} />
           <span className="text-[6px] font-medium">{commentCount}</span>
         </div>
