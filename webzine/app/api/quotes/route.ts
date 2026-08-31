@@ -22,7 +22,7 @@ export type Quote = {
 export async function GET() {
   const KEY = 'webzine_quotes';
   let quotes = await kv.get<Quote[]>(KEY);
-  if (!quotes) {
+  if (!quotes || quotes.length === 0) {
     // Seed with a default quote
     quotes = [
       {
@@ -34,6 +34,21 @@ export async function GET() {
       },
     ];
     await kv.set(KEY, quotes);
+  } else {
+    // Deduplicate by content to prevent identical quotes
+    const uniqueQuotes: Quote[] = [];
+    const seen = new Set();
+    for (const q of quotes) {
+       const hash = q.bookTitle + '|' + q.content;
+       if (!seen.has(hash)) {
+           seen.add(hash);
+           uniqueQuotes.push(q);
+       }
+    }
+    if (uniqueQuotes.length !== quotes.length) {
+       await kv.set(KEY, uniqueQuotes);
+       quotes = uniqueQuotes;
+    }
   }
   return NextResponse.json(quotes);
 }
