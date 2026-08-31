@@ -21,44 +21,38 @@ const COMMENTS_KEY = "webzine_comments_v2";
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
-export const getQuotes = (): Quote[] => {
-  if (typeof window === "undefined") return [];
-  const data = localStorage.getItem(QUOTES_KEY);
-  if (!data) {
-    // Initial dummy data
-    const initialQuotes: Quote[] = [
-      {
-        id: "q1",
-        bookTitle: "아주 먼 산책",
-        bookAuthor: "최수향",
-        content: "한 사람의 사랑이 먼저 땅에 묻히고, 그 사랑이 자라나 석달 전 고양이를 묻은 나의 마음을 다독인다. 저마다의 지구를 가득 채우는 것은 다름 아닌 한 존재를 향한 사랑이다.",
-        pageLocation: "7페이지 마지막 문장",
-        createdAt: Date.now() - 100000,
-      }
-    ];
-    localStorage.setItem(QUOTES_KEY, JSON.stringify(initialQuotes));
-    return initialQuotes;
+export const getQuotes = async (): Promise<Quote[]> => {
+  // Fetch quotes from the server‑side KV store
+  try {
+    const res = await fetch('/api/quotes');
+    if (!res.ok) throw new Error('Failed to fetch quotes');
+    const data: Quote[] = await res.json();
+    // Filter out unwanted content ("해봐야겠다") client‑side as before
+    return data.filter(q => !q.content.includes('해봐야겠다'));
+  } catch (e) {
+    console.error(e);
+    return [];
   }
-  
-  const parsedQuotes: Quote[] = JSON.parse(data);
-  const filteredQuotes = parsedQuotes.filter(q => !q.content.includes("해봐야겠다"));
-  
-  if (parsedQuotes.length !== filteredQuotes.length) {
-    localStorage.setItem(QUOTES_KEY, JSON.stringify(filteredQuotes));
-  }
-  
-  return filteredQuotes;
 };
 
-export const addQuote = (quote: Omit<Quote, "id" | "createdAt">): Quote => {
-  const quotes = getQuotes();
-  const newQuote: Quote = {
-    ...quote,
-    id: generateId(),
-    createdAt: Date.now(),
-  };
-  localStorage.setItem(QUOTES_KEY, JSON.stringify([newQuote, ...quotes]));
-  return newQuote;
+export const addQuote = async (quote: Omit<Quote, "id" | "createdAt">): Promise<Quote> => {
+  try {
+    const res = await fetch('/api/quotes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(quote),
+    });
+    if (!res.ok) throw new Error('Failed to add quote');
+    const newQuote: Quote = await res.json();
+    return newQuote;
+  } catch (e) {
+    console.error(e);
+    // Fallback to localStorage if API fails
+    const quotes = getQuotes();
+    const newQuote: Quote = { ...quote, id: Math.random().toString(36).substr(2, 9), createdAt: Date.now() };
+    localStorage.setItem('webzine_quotes_v2', JSON.stringify([newQuote, ...quotes]));
+    return newQuote;
+  }
 };
 
 export const getComments = (quoteId: string): Comment[] => {
