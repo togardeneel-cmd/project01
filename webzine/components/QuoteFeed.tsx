@@ -26,6 +26,7 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("all");
   const [totalCount, setTotalCount] = useState(0);
+  const [feedHeight, setFeedHeight] = useState<number>(1000);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,9 +55,16 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
 
       // Generate random positions and styles for the "scattered" field effect
       const isMobile = window.innerWidth < 768;
+      const verticalSpacing = isMobile ? 160 : 250;
+      const computedHeight = Math.max(
+        window.innerHeight * 1.5,
+        filtered.length * verticalSpacing + 400
+      );
+      setFeedHeight(computedHeight);
+
       const newPositions = filtered.map((_, i) => {
         // Reduce strict vertical spacing, allow more overlap like scattered pebbles
-        const topBase = isMobile ? i * 160 : Math.random() * 800;
+        const topBase = isMobile ? i * verticalSpacing : Math.random() * 800;
         const topOffset = isMobile ? Math.random() * 90 : 0;
         
         // Alternate sides and allow much wider horizontal range on mobile
@@ -77,7 +85,7 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
   }, [refreshTrigger, searchQuery, searchType]);
 
   return (
-    <div className="w-full relative min-h-[150vh] md:min-h-[1000px] overflow-x-hidden pb-32" ref={containerRef}>
+    <div className="w-full relative overflow-x-hidden pb-32" style={{ minHeight: `${feedHeight}px` }} ref={containerRef}>
       
       {/* Total Count */}
       <div className="fixed top-6 right-6 z-50 pointer-events-none">
