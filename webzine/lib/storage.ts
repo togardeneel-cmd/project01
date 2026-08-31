@@ -24,7 +24,7 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 export const getQuotes = async (): Promise<Quote[]> => {
   // Fetch quotes from the server‑side KV store
   try {
-    const res = await fetch('/api/quotes');
+    const res = await fetch('/api/quotes', { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed to fetch quotes');
     const data: Quote[] = await res.json();
     // Filter out unwanted content ("해봐야겠다") client‑side as before

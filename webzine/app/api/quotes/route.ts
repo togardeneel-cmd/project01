@@ -1,6 +1,9 @@
 import { kv } from '@vercel/kv';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export type Quote = {
   id: string;
   bookTitle: string;
