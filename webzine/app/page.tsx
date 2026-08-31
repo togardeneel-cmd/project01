@@ -29,6 +29,52 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    const migrateLocalData = async () => {
+      const localData = localStorage.getItem("webzine_quotes_v2");
+      if (localData) {
+        try {
+          const quotes = JSON.parse(localData);
+          if (Array.isArray(quotes) && quotes.length > 0) {
+            console.log("Migrating", quotes.length, "quotes to KV...");
+            let migratedCount = 0;
+            for (const q of quotes) {
+              // Ensure we don't migrate the placeholder text if it accidentally exists
+              if (!q.content.includes('해봐야겠다')) {
+                await fetch('/api/quotes', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    bookTitle: q.bookTitle,
+                    bookAuthor: q.bookAuthor,
+                    content: q.content,
+                    bookLink: q.bookLink,
+                    pageLocation: q.pageLocation,
+                  })
+                });
+                migratedCount++;
+              }
+            }
+            // Rename key to prevent double migration
+            localStorage.setItem("webzine_quotes_v2_migrated", localData);
+            localStorage.removeItem("webzine_quotes_v2");
+            
+            if (migratedCount > 0) {
+              setRefreshTrigger(prev => prev + 1);
+              alert(`로컬 데이터 ${migratedCount}개가 서버로 성공적으로 동기화되었습니다!`);
+            }
+          }
+        } catch (e) {
+          console.error("Migration failed", e);
+        }
+      }
+    };
+    
+    if (typeof window !== "undefined") {
+      setTimeout(migrateLocalData, 1000);
+    }
+  }, []);
+
   const handleQuoteAdded = () => {
     setRefreshTrigger(prev => prev + 1);
   };
