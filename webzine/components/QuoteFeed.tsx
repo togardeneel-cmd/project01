@@ -100,8 +100,8 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
       </div>
       {quotes.length === 0 ? (
         <div className="flex flex-col items-center justify-center pt-32 text-center w-full z-10 relative">
-          <p className="text-xl text-gray-500 font-serif mb-4">아직 들판에 네잎클로버가 없습니다.</p>
-          <p className="text-gray-400 text-sm">우측 상단의 버튼을 눌러 첫 번째 행운을 심어보세요.</p>
+          <p className="text-xl text-white font-serif mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">아직 들판에 네잎클로버가 없습니다.</p>
+          <p className="text-white/90 text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">아래 버튼을 눌러 첫 번째 행운을 심어보세요.</p>
         </div>
       ) : (
         <>
