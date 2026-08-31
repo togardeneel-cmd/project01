@@ -25,11 +25,13 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
   const [hoveredBookTitle, setHoveredBookTitle] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("all");
+  const [totalCount, setTotalCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
       const fetchedQuotes = await getQuotes();
+      setTotalCount(fetchedQuotes.length);
       const filtered = fetchedQuotes.filter(q => {
         if (!searchQuery.trim()) return true;
         const query = searchQuery.toLowerCase();
@@ -72,8 +74,15 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
   return (
     <div className="w-full relative min-h-[150vh] md:min-h-[1000px] overflow-x-hidden pb-32" ref={containerRef}>
       
+      {/* Total Count */}
+      <div className="w-full text-center pt-2 pb-6 z-20 relative">
+        <p className="text-white/90 font-serif text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+          {totalCount}개의 조각이 모였습니다
+        </p>
+      </div>
+
       {/* Search Bar */}
-      <div className="w-full max-w-xl mx-auto px-4 pt-4 pb-12 z-20 relative">
+      <div className="w-full max-w-xl mx-auto px-4 pb-12 z-20 relative">
         <div className="flex bg-white/40 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm border border-white/50 p-1">
           <select 
             className="bg-transparent border-none outline-none text-green-950 font-medium text-sm px-3 py-2 cursor-pointer"
