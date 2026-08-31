@@ -43,13 +43,11 @@ export default function QuoteCard({
   ];
   const leafRadius = radiusVariants[index % radiusVariants.length];
 
-  // Diverse color themes for Quote Cards
+  // Natural color themes for Quote Cards (Green, Yellow, White)
   const themes = [
     { bg: "bg-gradient-to-br from-[#e6f4ea]/75 to-[#ceead6]/75 backdrop-blur-md", text: "text-green-950/80", title: "text-green-900", icon: "text-green-700" },
     { bg: "bg-gradient-to-br from-[#fff8e1]/75 to-[#ffecb3]/75 backdrop-blur-md", text: "text-amber-950/80", title: "text-amber-900", icon: "text-amber-700" },
-    { bg: "bg-gradient-to-br from-[#ffffff]/80 to-[#f5f5f5]/80 backdrop-blur-md", text: "text-slate-800/90", title: "text-slate-900", icon: "text-slate-600" },
-    { bg: "bg-gradient-to-br from-[#f0f8ff]/75 to-[#e1f5fe]/75 backdrop-blur-md", text: "text-sky-950/80", title: "text-sky-900", icon: "text-sky-700" },
-    { bg: "bg-gradient-to-br from-[#fff0f5]/75 to-[#fce4ec]/75 backdrop-blur-md", text: "text-rose-950/80", title: "text-rose-900", icon: "text-rose-700" }
+    { bg: "bg-gradient-to-br from-[#ffffff]/80 to-[#f5f5f5]/80 backdrop-blur-md", text: "text-slate-800/90", title: "text-slate-900", icon: "text-slate-600" }
   ];
   const theme = themes[index % themes.length];
 
