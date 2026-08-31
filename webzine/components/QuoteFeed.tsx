@@ -28,51 +28,45 @@ export default function QuoteFeed({ refreshTrigger }: QuoteFeedProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchedQuotes = getQuotes();
-    
-    const filtered = fetchedQuotes.filter(q => {
-      if (!searchQuery.trim()) return true;
-      const query = searchQuery.toLowerCase();
-      
-      if (searchType === "all") {
-        return (
-          q.bookTitle.toLowerCase().includes(query) ||
-          q.bookAuthor.toLowerCase().includes(query) ||
-          q.content.toLowerCase().includes(query)
-        );
-      } else if (searchType === "bookTitle") {
-        return q.bookTitle.toLowerCase().includes(query);
-      } else if (searchType === "bookAuthor") {
-        return q.bookAuthor.toLowerCase().includes(query);
-      } else if (searchType === "content") {
-        return q.content.toLowerCase().includes(query);
-      }
-      return true;
-    });
+    (async () => {
+      const fetchedQuotes = await getQuotes();
+      const filtered = fetchedQuotes.filter(q => {
+        if (!searchQuery.trim()) return true;
+        const query = searchQuery.toLowerCase();
+        if (searchType === "all") {
+          return (
+            q.bookTitle.toLowerCase().includes(query) ||
+            q.bookAuthor.toLowerCase().includes(query) ||
+            q.content.toLowerCase().includes(query)
+          );
+        } else if (searchType === "bookTitle") {
+          return q.bookTitle.toLowerCase().includes(query);
+        } else if (searchType === "bookAuthor") {
+          return q.bookAuthor.toLowerCase().includes(query);
+        } else if (searchType === "content") {
+          return q.content.toLowerCase().includes(query);
+        }
+        return true;
+      });
+      setQuotes(filtered);
 
-    setQuotes(filtered);
-
-    // Generate random positions and styles for the "scattered" field effect
-    // We do this in useEffect to avoid hydration mismatch
-    const isMobile = window.innerWidth < 768;
-    const newPositions = filtered.map((_, i) => {
-      // In mobile, we stagger them vertically to avoid too much overlap
-      // In desktop, we scatter them freely
-      const topBase = isMobile ? i * 250 : Math.random() * 800; 
-      const topOffset = isMobile ? Math.random() * 50 : 0;
-      
-      const leftRange = isMobile ? 20 : 75; // percentage
-      const leftOffset = isMobile ? 5 : 5;
-      
-      return {
-        top: isMobile ? `${topBase + topOffset}px` : `${Math.random() * 60 + 5}%`,
-        left: `${Math.random() * leftRange + leftOffset}%`,
-        rotate: (Math.random() - 0.5) * 40, // -20 to 20 degrees
-        scale: 0.85 + Math.random() * 0.3, // 0.85 to 1.15
-        zIndex: Math.floor(Math.random() * 50),
-      };
-    });
-    setPositions(newPositions);
+      // Generate random positions and styles for the "scattered" field effect
+      const isMobile = window.innerWidth < 768;
+      const newPositions = filtered.map((_, i) => {
+        const topBase = isMobile ? i * 250 : Math.random() * 800;
+        const topOffset = isMobile ? Math.random() * 50 : 0;
+        const leftRange = isMobile ? 20 : 75;
+        const leftOffset = isMobile ? 5 : 5;
+        return {
+          top: isMobile ? `${topBase + topOffset}px` : `${Math.random() * 60 + 5}%`,
+          left: `${Math.random() * leftRange + leftOffset}%`,
+          rotate: (Math.random() - 0.5) * 40,
+          scale: 0.85 + Math.random() * 0.3,
+          zIndex: Math.floor(Math.random() * 50),
+        };
+      });
+      setPositions(newPositions);
+    })();
   }, [refreshTrigger, searchQuery, searchType]);
 
   return (
